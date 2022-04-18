@@ -24,6 +24,20 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: Package into node binary
+        id: pkg
+        uses: lando/pkg-action@v2
+        with:
+          entrypoint: app.js
+          arch: amd64
+          node-version: node16
+          options: -o btcapi
+          os: linux
+          upload: false
+
+      - name: echo binary file
+        bash: echo "${{ steps.pkg.outputs.file }}"
   
   post-deploy:
     needs: ['deploy']
