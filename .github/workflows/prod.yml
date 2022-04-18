@@ -19,12 +19,14 @@ jobs:
         uses: actions/checkout@v2
   
   deploy:
+    needs: ['test', 'build']
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
   
   post-deploy:
+    needs: ['deploy']
     runs-on: ubuntu-latest
     steps:
       - name: checkout
