@@ -33,7 +33,14 @@ jobs:
           os: linux
           upload: false
       
-      - name: get IP address
+      - name: get IP address - dev
+        if: github.event_name == 'pull_request'
+        id: ip
+        run: echo "::set-output name=ip-address::3.87.141.90"
+        shell: bash
+
+      - name: get IP address - prod
+        if: github.event_name == 'push'
         id: ip
         run: echo "::set-output name=ip-address::3.87.141.90"
         shell: bash
