@@ -46,13 +46,13 @@ jobs:
         shell: bash
 
       - name: ansible - dev
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: ops/ansible/playbook.yml
           key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
           options: |
-            -i "${{ steps.ip.outputs.ip-address }},"
+            -i "${{ steps.ip-dev.outputs.ip-address }},"
             --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
@@ -65,7 +65,7 @@ jobs:
           playbook: ops/ansible/playbook.yml
           key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
           options: |
-            -i "${{ steps.ip.outputs.ip-address }},"
+            -i "${{ steps.ip-prod.outputs.ip-address }},"
             --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
