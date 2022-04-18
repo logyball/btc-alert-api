@@ -22,12 +22,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: Install SSH Private Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          name: id_rsa_ansible
-          known_hosts: unnecessary 
 
       - name: Package into node binary
         id: pkg
@@ -48,7 +42,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: ops/ansible/playbook.yml
-          key: $HOME/.ssh/id_rsa_ansible
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           options: |
             -i "${{ steps.ip.outputs.ip-address }},"
             --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
