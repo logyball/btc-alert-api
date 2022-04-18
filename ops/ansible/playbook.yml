@@ -6,11 +6,12 @@
   vars:
     mongo_connection: "{{ mongo }}"
     jwt_key: "{{ jwt }}"
+    binary_path: "{{ bin }}"
 
   tasks:
     - name: install binary
       ansible.builtin.copy:
-        src: ./app
+        src: "{{ binary_path }}"
         dest: /usr/local/bin/btcapi
         owner: root
         group: root
