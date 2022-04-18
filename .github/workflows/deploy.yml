@@ -47,7 +47,7 @@ jobs:
             -i "${{ steps.ip.outputs.ip-address }},"
             --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
-            --extra-vars bin=${{ steps.pkg.outputs.file }}
+            --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
             --verbose
 
       - name: echo binary file
