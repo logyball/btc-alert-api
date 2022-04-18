@@ -37,7 +37,8 @@ jobs:
           upload: false
 
       - name: echo binary file
-        bash: echo "${{ steps.pkg.outputs.file }}"
+        run: echo "${{ steps.pkg.outputs.file }}"
+        shell: bash
   
   post-deploy:
     needs: ['deploy']
