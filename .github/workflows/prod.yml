@@ -32,7 +32,6 @@ jobs:
           entrypoint: app.js
           arch: amd64
           node-version: node16
-          options: -o btcapi
           os: linux
           upload: false
 
