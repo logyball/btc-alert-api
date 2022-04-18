@@ -1,0 +1,14 @@
+[Unit]
+Description=BTC Alert API
+
+[Service]
+Type=simple  
+Restart=always
+User=logan
+Environment=API_PORT=3000
+Environment=MONGO_CONNECTION={{ mongo_connection }}
+Environment=JWT_KEY={{ jwt_key }}
+ExecStart=/usr/local/bin/btcapi
+
+[Install]
+WantedBy=multi-user.target

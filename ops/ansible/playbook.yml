@@ -1,0 +1,33 @@
+---
+- name: Install
+  hosts: all
+  remote_user: logan
+  become: yes
+  vars:
+    mongo_connection: "{{ mongo }}"
+    jwt_key: "{{ jwt }}"
+
+  tasks:
+    - name: install binary
+      ansible.builtin.copy:
+        src: ./app
+        dest: /usr/local/bin/btcapi
+        owner: root
+        group: root
+        mode: '0777'
+
+        
+    - name: install service file
+      ansible.builtin.template:
+        src: ./service.j2
+        dest: /etc/systemd/system/btcapi.service
+        owner: root
+        group: root
+        mode: '0744'
+
+    - name: start service
+      systemd:
+        name: btcapi
+        state: started
+        enabled: yes
+        daemon_reload: yes
