@@ -41,13 +41,13 @@ jobs:
       - name: get IP address - dev
         if: github.event_name == 'pull_request'
         id: ip-dev
-        run: echo "::set-output name=ip-address::$($(aws ssm get-parameter --with-decryption --name "/dev/vm/ip" | jq -r .Parameter.Value))"
+        run: echo "::set-output name=ip-address::$(aws ssm get-parameter --with-decryption --name "/dev/vm/ip" | jq -r .Parameter.Value)"
         shell: bash
 
       - name: get IP address - prod
         if: github.event_name == 'push'
         id: ip-prod
-        run: echo "::set-output name=ip-address::$($(aws ssm get-parameter --with-decryption --name "/prod/vm/ip" | jq -r .Parameter.Value))"
+        run: echo "::set-output name=ip-address::$(aws ssm get-parameter --with-decryption --name "/prod/vm/ip" | jq -r .Parameter.Value)"
         shell: bash
 
       - name: ansible - dev
