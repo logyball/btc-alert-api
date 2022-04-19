@@ -8,7 +8,6 @@ on:
     branches:
        - main
 
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,6 +21,17 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - run: npm install
 
       - name: Package into node binary
         id: pkg
@@ -36,13 +46,13 @@ jobs:
       - name: get IP address - dev
         if: github.event_name == 'pull_request'
         id: ip-dev
-        run: echo "::set-output name=ip-address::3.87.141.90"
+        run: echo "::set-output name=ip-address::$(aws ssm get-parameter --with-decryption --name "/dev/vm/ip" | jq -r .Parameter.Value)"
         shell: bash
 
       - name: get IP address - prod
         if: github.event_name == 'push'
         id: ip-prod
-        run: echo "::set-output name=ip-address::3.87.141.90"
+        run: echo "::set-output name=ip-address::$(aws ssm get-parameter --with-decryption --name "/prod/vm/ip" | jq -r .Parameter.Value)"
         shell: bash
 
       - name: ansible - dev
@@ -53,7 +63,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
           options: |
             -i "${{ steps.ip-dev.outputs.ip-address }},"
-            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
+            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING_DEV }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
             --verbose
@@ -66,14 +76,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
           options: |
             -i "${{ steps.ip-prod.outputs.ip-address }},"
-            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
+            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING_PROD }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
             --verbose
-
-      - name: echo binary file
-        run: echo "${{ steps.pkg.outputs.file }}"
-        shell: bash
   
   post-deploy:
     needs: ['deploy']
