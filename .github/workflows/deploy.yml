@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
           options: |
             -i "${{ steps.ip-dev.outputs.ip-address }},"
-            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
+            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING_DEV }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
             --verbose
@@ -71,7 +71,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
           options: |
             -i "${{ steps.ip-prod.outputs.ip-address }},"
-            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING }}
+            --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING_PROD }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
             --verbose
