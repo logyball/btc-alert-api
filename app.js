@@ -13,7 +13,7 @@ const port = process.env.API_PORT === '' ? 3000 : parseInt(process.env.API_PORT)
 const connectionString = process.env.MONGO_CONNECTION === '' ? 'mongodb://user:pass@localhost:27017/btc' : process.env.MONGO_CONNECTION + "btc";
 
 const app = express();
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 
 mongoose.connect(connectionString, { authSource: 'admin' });
@@ -21,6 +21,11 @@ mongoose.connection.on('connected', () => {
   console.log('Connected to MongoDB @ 27017');
 });
 mongoose.set('debug', true);
+
+app.get('/', function(req, res, next) {
+  res.sendStatus(200);
+  return;
+})
 
 app.post('/user/signup', validateSignupParams, signup, generateAccessToken);
 
