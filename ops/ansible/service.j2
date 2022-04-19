@@ -5,7 +5,7 @@ Description=BTC Alert API
 Type=simple  
 Restart=always
 User=logan
-Environment=API_PORT={{ port }}
+Environment=API_PORT={{ api_port }}
 Environment=MONGO_CONNECTION={{ mongo_connection }}
 Environment=JWT_KEY={{ jwt_key }}
 ExecStart=/usr/local/bin/btcapi

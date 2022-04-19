@@ -7,13 +7,13 @@
     mongo_connection: "{{ mongo }}"
     jwt_key: "{{ jwt }}"
     binary_path: "{{ bin }}"
-    port: 3000
+    api_port: 3000
 
   tasks:
-    - name: Allow all access to tcp port {{ port }}
+    - name: Allow all access to tcp port {{ api_port }}
       community.general.ufw:
         rule: allow
-        port: '{{ port }}'
+        port: '{{ api_port }}'
         proto: tcp
 
     - name: install binary
