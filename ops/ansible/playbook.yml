@@ -29,6 +29,6 @@
     - name: start service
       systemd:
         name: btcapi
-        state: started
+        state: restarted
         enabled: yes
         daemon_reload: yes
