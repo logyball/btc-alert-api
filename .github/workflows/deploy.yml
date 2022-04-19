@@ -75,10 +75,6 @@ jobs:
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
             --verbose
-
-      - name: echo binary file
-        run: echo "${{ steps.pkg.outputs.file }}"
-        shell: bash
   
   post-deploy:
     needs: ['deploy']
