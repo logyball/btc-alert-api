@@ -7,8 +7,15 @@
     mongo_connection: "{{ mongo }}"
     jwt_key: "{{ jwt }}"
     binary_path: "{{ bin }}"
+    api_port: 3000
 
   tasks:
+    - name: Allow all access to tcp port {{ api_port }}
+      community.general.ufw:
+        rule: allow
+        port: '{{ api_port }}'
+        proto: tcp
+
     - name: install binary
       ansible.builtin.copy:
         src: "{{ binary_path }}"
@@ -29,6 +36,6 @@
     - name: start service
       systemd:
         name: btcapi
-        state: started
+        state: restarted
         enabled: yes
         daemon_reload: yes
