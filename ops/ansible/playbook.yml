@@ -23,7 +23,6 @@
         owner: root
         group: root
         mode: '0777'
-
         
     - name: install service file
       ansible.builtin.template:

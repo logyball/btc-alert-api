@@ -9,11 +9,17 @@ const { addAlert, getAlertsByUserId } = require('./routes/alerts');
 const { signup, login } = require('./routes/users');
 const { generateAccessToken, validateToken } = require('./routes/authentication');
 
-const port = process.env.API_PORT === '' ? 3000 : parseInt(process.env.API_PORT);
-const connectionString = process.env.MONGO_CONNECTION === '' ? 'mongodb://user:pass@localhost:27017/btc' : process.env.MONGO_CONNECTION + "btc";
+const port = process.env.API_PORT ? parseInt(process.env.API_PORT) : 3000;
+const connectionString = process.env.MONGO_CONNECTION ? process.env.MONGO_CONNECTION + "btc" : 'mongodb://user:pass@localhost:27017/btc' ;
 
 const app = express();
-app.use(cors());
+
+const corsOptions = process.env.MONGO_CONNECTION == 'DEPLOYED' ? {
+  origin: 'https://www.btcalerter.com',
+  credentials: true,
+} : {};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 mongoose.connect(connectionString, { authSource: 'admin' });
