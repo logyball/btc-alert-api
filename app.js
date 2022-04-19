@@ -10,7 +10,7 @@ const { signup, login } = require('./routes/users');
 const { generateAccessToken, validateToken } = require('./routes/authentication');
 
 const port = process.env.API_PORT ? parseInt(process.env.API_PORT) : 3000;
-const connectionString = process.env.MONGO_CONNECTION ? process.env.MONGO_CONNECTION + "btc" : 'mongodb://user:pass@localhost:27017/btc' ;
+const connectionString = process.env.MONGO_CONNECTION ? process.env.MONGO_CONNECTION : 'mongodb://user:pass@localhost:27017/btc' ;
 
 const app = express();
 
