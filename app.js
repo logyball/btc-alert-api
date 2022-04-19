@@ -15,8 +15,10 @@ const connectionString = process.env.MONGO_CONNECTION === '' ? 'mongodb://user:p
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: '*',
-	optionsSuccessStatus: 200
+  origin: (process.env.ENV === 'DEPLOYED') ? 'https://www.btcalerter.com' : '*',
+	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+	preflightContinue: true,
+	optionsSuccessStatus: 204
 }))
 
 mongoose.connect(connectionString, { authSource: 'admin' });
