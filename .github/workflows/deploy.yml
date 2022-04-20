@@ -17,6 +17,7 @@ jobs:
   
   deploy:
     needs: ['test']
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -44,13 +45,11 @@ jobs:
           upload: false
 
       - name: get IP address
-        if: github.event_name == 'push'
         id: ip-prod
         run: echo "::set-output name=ip-address::$(aws ssm get-parameter --with-decryption --name "/prod/vm/ip" | jq -r .Parameter.Value)"
         shell: bash
 
       - name: ansible
-        if: github.event_name == 'push'
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: ops/ansible/playbook.yml
@@ -64,6 +63,7 @@ jobs:
   
   post-deploy:
     needs: ['deploy']
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: checkout
