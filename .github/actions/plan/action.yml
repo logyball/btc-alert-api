@@ -6,15 +6,15 @@ runs:
     - name: terraform initialize
       run: terraform init
       shell: bash
-      working-directory: terraform
+      working-directory: ops/terraform
 
     - name: terraform validate
       run: terraform validate
       shell: bash
-      working-directory: terraform
+      working-directory: ops/terraform
     
     - name: terraform plan
       id: plan
       run: terraform plan
       shell: bash
-      working-directory: terraform
+      working-directory: ops/terraform
