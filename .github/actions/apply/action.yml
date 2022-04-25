@@ -1,0 +1,14 @@
+name: 'Terraform Apply'
+description: 'Terraform apply workflow'
+runs:
+  using: "composite"
+  steps:
+    - name: terraform initialize
+      run: terraform init
+      shell: bash
+      working-directory: terraform
+
+    - name: terraform apply
+      run: terraform apply -auto-approve
+      shell: bash
+      working-directory: terraform
