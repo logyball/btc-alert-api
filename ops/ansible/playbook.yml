@@ -7,6 +7,8 @@
     mongo_connection: "{{ mongo }}"
     jwt_key: "{{ jwt }}"
     binary_path: "{{ bin }}"
+    aws_key: "{{ aws_key }}"
+    aws_secret: "{{ aws_secret }}"
     api_port: 3000
 
   tasks:

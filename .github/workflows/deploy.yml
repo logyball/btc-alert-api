@@ -69,7 +69,7 @@ jobs:
           upload: false
 
       - name: get vars from parameter store
-        id: ip-prod
+        id: ssm-values
         run: |
           echo "::set-output name=ip-address::$(aws ssm get-parameter --with-decryption --name "/vm/ip" | jq -r .Parameter.Value)"
           echo "::set-output name=ses-iam-key::$(aws ssm get-parameter --with-decryption --name "/ses/userKey" | jq -r .Parameter.Value)"
@@ -82,10 +82,12 @@ jobs:
           playbook: ops/ansible/playbook.yml
           key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
           options: |
-            -i "${{ steps.ip-prod.outputs.ip-address }},"
+            -i "${{ steps.ssm-values.outputs.ip-address }},"
             --extra-vars mongo=${{ secrets.MONGO_CONNECTION_STRING_PROD }}
             --extra-vars jwt=${{ secrets.JWT_KEY }}
             --extra-vars bin="../../${{ steps.pkg.outputs.file }}"
+            --extra-vars aws_key="${{ steps.ssm-values.outputs.ses-iam-key }}"
+            --extra-vars aws_secret="${{ steps.ssm-values.outputs.ses-iam-secret }}"
             --verbose
   
   post-deploy:
