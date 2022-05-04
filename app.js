@@ -6,7 +6,7 @@ const {
   validateAlertParams, validateSignupParams, validateLoginParams, validateGetAlertsByUserIdParams,
 } = require('./validators');
 const { addAlert, getAlertsByUserId } = require('./routes/alerts');
-const { signup, login } = require('./routes/users');
+const { signup, login, verify } = require('./routes/users');
 const { generateAccessToken, validateToken } = require('./routes/authentication');
 
 const port = process.env.API_PORT ? parseInt(process.env.API_PORT) : 3000;
@@ -33,7 +33,9 @@ app.get('/', function(req, res, next) {
   return;
 })
 
-app.post('/user/signup', validateSignupParams, signup, generateAccessToken);
+app.post('/user/signup', validateSignupParams, signup);
+
+app.get('/user/verify/:code', verify);
 
 app.post('/user/login', validateLoginParams, login, generateAccessToken);
 
